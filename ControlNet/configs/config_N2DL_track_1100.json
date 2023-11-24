@@ -1,0 +1,8 @@
+{   
+    "name": "N2DL_track_1100_700",
+    "resume_path": "/export/data/msturm/N2DL2_track_550/last.ckpt",
+    "ckpt_save_path": "/export/data/msturm/N2DL2_track_1100",
+    "gpu_train": 1,
+    "gpu_samp": 7,
+    "max_steps": 7000
+}

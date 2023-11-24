@@ -1,0 +1,8 @@
+{   
+    "name": "HUH2_512_512",
+    "resume_path": "/export/home/msturm/ControlNet/models/control_sd15_cell.ckpt",
+    "ckpt_save_path": "/export/data/msturm/HUH2_512",
+    "gpu_train": 3,
+    "gpu_samp": 7,
+    "max_epoch": 250
+}

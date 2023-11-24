@@ -1,0 +1,8 @@
+{   
+    "name": "HUH2_track_1024_1024",
+    "resume_path": "/export/data/msturm/HUH2_track_512/last.ckpt",
+    "ckpt_save_path": "/export/data/msturm/HUH2_track_1024",
+    "gpu_train": 7,
+    "gpu_samp": 6,
+    "max_epoch": 15
+}

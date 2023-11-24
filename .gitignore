@@ -1,0 +1,15 @@
+SCF
+Inputs
+sampling
+Outputs
+
+
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.bmp
+*.tiff
+*.ico
+*.tif
+*.ckpt

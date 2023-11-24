@@ -1,0 +1,8 @@
+{   
+    "name": "PSC_track_360_288",
+    "resume_path": "/export/data/msturm/PSC_360/last.ckpt",
+    "ckpt_save_path": "/export/data/msturm/PSC_track_360",
+    "gpu_train": 1,
+    "gpu_samp": 7,
+    "max_steps": 20000
+}

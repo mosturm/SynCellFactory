@@ -1,0 +1,8 @@
+{   
+    "name": "MSC2_track_992_832",
+    "resume_path": "/export/data/msturm/MSC_track_496/last.ckpt",
+    "ckpt_save_path": "/export/data/msturm/MSC_track_992",
+    "gpu_train": 4,
+    "gpu_samp": 4,
+    "max_epoch": 20
+}

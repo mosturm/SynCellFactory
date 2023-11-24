@@ -1,0 +1,9 @@
+{   
+    "name": "HELA2_512_512",
+    "resume_path": "/export/data/msturm/HeLa_2_256_256/last.ckpt",
+    "ckpt_save_path": "/export/data/msturm/HeLa2_512_512",
+    "gpu_train": 4,
+    "gpu_samp": 6,
+    "max_epoch": 16
+
+}

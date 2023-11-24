@@ -1,0 +1,8 @@
+{   
+    "name": "HELA2_256_256",
+    "resume_path": "/export/home/msturm/ControlNet/models/control_sd15_cell.ckpt",
+    "ckpt_save_path": "/export/data/msturm/HeLa_2_256_256",
+    "gpu_train": 7,
+    "gpu_samp": 7,
+    "max_epoch": 200
+}
