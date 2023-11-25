@@ -1,25 +1,29 @@
+import sys
+import os
+parent_dir = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(parent_dir)
+
+
+
 from share import *
 import config
 
-import cv2
+
 import einops
-import gradio as gr
 import numpy as np
 import torch
 import random
-import os
 from PIL import Image
 
 
 from pytorch_lightning import seed_everything
 from annotator.util import resize_image, HWC3
-from annotator.canny import CannyDetector
+
 from cldm.model import create_model, load_state_dict
 from cldm.ddim_hacked import DDIMSampler
 from vid_helper import ctc_2_track, delete_files_in_folder
 
 
-#apply_canny = CannyDetector()
 
 
 
@@ -66,12 +70,12 @@ def process(input_image, prompt, a_prompt, n_prompt, num_samples, image_resoluti
         results = [x_samples[i] for i in range(num_samples)]
     return [255 - detected_map] + results
 
-def make_init_pic(input_dir, output_dir, prompt, a_prompt, n_prompt, num_samples, image_resolution, ddim_steps, guess_mode, strength, scale, seed, eta, low_threshold, high_threshold):
+def make_init_pic(name, device, input_dir, output_dir, prompt, a_prompt, n_prompt, num_samples, image_resolution, ddim_steps, guess_mode, strength, scale, seed, eta, low_threshold, high_threshold):
     
-    resume_path = '/export/data/msturm/PSC_720/last.ckpt'
+    resume_path = f'./models/{name}/last.ckpt'
 
 
-    device = torch.device("cuda:2" if torch.cuda.is_available() else "cpu")
+    
     torch.cuda.set_device(device)
 
 
@@ -103,16 +107,15 @@ def make_init_pic(input_dir, output_dir, prompt, a_prompt, n_prompt, num_samples
 
     return img_number
 
-def make_vid(num, id_path, res_path, cond_path, prompt, a_prompt, n_prompt, num_samples, image_resolution, ddim_steps, guess_mode, strength, scale, seed, eta):
-    resume_path = '/export/data/msturm/PSC_track_720/last.ckpt'#'/export/data/msturm/HeLa_track_512_512/last-epoch=56.ckpt'#
-    A=137.32
-    pix=720
+def make_vid(name,device, num, id_path, res_path, cond_path, prompt, a_prompt, n_prompt, num_samples, image_resolution, ddim_steps, guess_mode, strength, scale, seed, eta):
+    resume_path = f'./models/{name}_track/last.ckpt'
+    A,pix=get_A_pix(name)
 
     r_a=int(np.sqrt(A/ np.pi) / 4) if int(np.sqrt(A/ np.pi) / 4) > 2 else 2
     f=((pix)/(512))
     r_a = int(r_a /f)
 
-    device = torch.device("cuda:2" if torch.cuda.is_available() else "cpu")
+    
     torch.cuda.set_device(device)
 
     model = create_model('./models/cldm_v15.yaml').to(device)
@@ -138,83 +141,89 @@ def make_vid(num, id_path, res_path, cond_path, prompt, a_prompt, n_prompt, num_
         output_img = Image.fromarray(result.astype('uint8'))  # Convert result to PIL Image
         output_file_num = int(os.path.splitext(os.path.basename(image_path))[0]) - 1
         output_path = os.path.join(res_path, str(output_file_num) + f'.png')
-        print('processing', image_path, output_path )
+        #print('processing', image_path, output_path )
         output_img.save(output_path)  # Save the image to the output directory
 
+def get_A_pix(name):
+    path = f'./sampling/{name}/statistics.txt'
 
-'''
+    # Initialize variables
+    A_mu = None
+    max_shape_width = None
 
+    # Open and read the file
+    try:
+        with open(path, 'r') as file:
+            lines = file.readlines()
 
-input_dir = './sampling/dots2CNet/id/' # Replace this with your input images directory
-output_dir = './sampling/dots2CNet/res_track/' # Replace this with your output images directory
+            # Process each line to find the required values
+            for line in lines:
+                if 'A_mu:' in line:
+                    A_mu = float(line.split(':')[1].strip())
+                elif 'Shape:' in line:
+                    shape_values = line.split(':')[1].strip().strip('()').split(',')
+                    max_shape_width = max(int(shape_values[0].strip()), int(shape_values[1].strip()))
 
-prompt = "cell, microscopy, image"  # Replace this with your prompt
-a_prompt =''
-n_prompt = ''
-num_samples = 1
-image_resolution = 512
-ddim_steps = 50
-guess_mode = False
-strength = 1.0
-scale = 9.0
-seed = -1#1554647562#-1#
-eta = 0.0
-low_threshold = 100
-high_threshold = 200
+    except FileNotFoundError:
+        print(f"File not found: {path}")
+        return None, None
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return None, None
 
-
-num = make_init_pic(input_dir, output_dir, prompt, a_prompt, n_prompt, num_samples, image_resolution, ddim_steps, guess_mode, strength, scale, seed, eta, low_threshold, high_threshold)
-
-
-prompt ="cell, microscopy, image"  # Replace this with your prompt
-
-id_path = './sampling/dots2CNet/id_track/'
-res_path = './sampling/dots2CNet/res_track/'
-cond_path = './sampling/dots2CNet/track_cond/'
+    return A_mu, max_shape_width
 
 
 
-make_vid(num, id_path, res_path, cond_path, prompt, a_prompt, n_prompt, num_samples, image_resolution, ddim_steps, guess_mode, strength, scale, seed, eta)
-'''
+def sample_vid(name, cuda_index):
+    # Fixed parameters
+    prompt = "cell, microscopy, image"
+    a_prompt = ''
+    n_prompt = ''
+    num_samples = 1
+    image_resolution = 512
+    ddim_steps = 50
+    guess_mode = False
+    strength = 1.0
+    scale = 9.0
+    seed = -1  # Set a fixed seed or use a random one
+    eta = 0.0
+    low_threshold = 100
+    high_threshold = 200
 
-prompt = "cell, microscopy, image"  # Replace this with your prompt
-a_prompt =''
-n_prompt = ''
-num_samples = 1
-image_resolution = 512
-ddim_steps = 50
-guess_mode = False
-strength = 1.0
-scale = 9.0
-seed = -1#1554647562#-1#
-eta = 0.0
-low_threshold = 100
-high_threshold = 200
+    base_dir = f'./sampling/{name}/'
 
-base_dir = './sampling/PSC/'
+    if torch.cuda.is_available():
+        device = torch.device(f"cuda:{cuda_index}")
+    else:
+        device = torch.device("cpu")
 
-# Step 1: Create a list of all folders that match the pattern of being a run
-run_folders = [f for f in os.listdir(base_dir) if not f.endswith('_GT')]
+    torch.cuda.set_device(device)
 
-for run in run_folders:
-    cond_dir = os.path.join(base_dir, f"{run}_GT/COND/")
-    if not os.path.exists(cond_dir):
-        os.makedirs(cond_dir)
-    delete_files_in_folder(os.path.join(base_dir, run))
-    delete_files_in_folder(os.path.join(base_dir, f"{run}_GT/COND/"))
-    # Step 2: Derive the paths for the ground truth (`GT`) data based on the run folder name
-    input_dir = os.path.join(base_dir, f"{run}_GT/ID/")
-    output_dir = os.path.join(base_dir, run)
+    # Step 1: Create a list of all folders that match the pattern of being a run
+    run_folders = [f for f in os.listdir(base_dir) if not f.endswith('_GT')]
 
-    # Call make_init_pic with the derived paths
-    num = make_init_pic(input_dir, output_dir, prompt, a_prompt, n_prompt, num_samples, image_resolution, ddim_steps, guess_mode, strength, scale, seed, eta, low_threshold, high_threshold)
+    for run in run_folders:
+        # Derived and fixed paths
+        cond_dir = os.path.join(base_dir, f"{run}_GT/COND/")
+        input_dir = os.path.join(base_dir, f"{run}_GT/ID/")
+        output_dir = os.path.join(base_dir, run)
+        id_path = os.path.join(base_dir, f"{run}_GT/TRA/")
+        res_path = os.path.join(base_dir, run)
 
-    # Paths for make_vid
-    id_path = os.path.join(base_dir, f"{run}_GT/TRA/")
-    res_path = os.path.join(base_dir, run)
+        # Ensure directories exist and are clean
+        if not os.path.exists(cond_dir):
+            os.makedirs(cond_dir)
+        delete_files_in_folder(output_dir)
+        delete_files_in_folder(cond_dir)
+
+        # Step 2: Process initial picture
+        num = make_init_pic(name, device,input_dir, output_dir, prompt, a_prompt, n_prompt, num_samples, 
+                            image_resolution, ddim_steps, guess_mode, strength, scale, seed, eta, 
+                            low_threshold, high_threshold)
+
+        # Step 3: Generate video frames
+        make_vid(name, device, num, id_path, res_path, cond_dir, prompt, a_prompt, n_prompt, num_samples, 
+                 image_resolution, ddim_steps, guess_mode, strength, scale, seed, eta)
 
 
-  
-
-    # Step 6: Call make_vid with the derived paths
-    make_vid(num, id_path, res_path, cond_dir, prompt, a_prompt, n_prompt, num_samples, image_resolution, ddim_steps, guess_mode, strength, scale, seed, eta)

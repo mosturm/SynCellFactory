@@ -134,7 +134,7 @@ def ini_pic(b, r_mu, r_sig, pix_max,pix_min, t, run, path='.',bg=False):
         circle = Circle(x0, y0, r_com)
         circles.append(circle)
     
-    _all_overlapresolves(circles)
+    resolve_all_overlaps(circles)
     
     # Extract updated x, y, r values for plotting
     xu, yu, ru = zip(*[(circle.x if isinstance(circle.x, float) else circle.x[0], 
