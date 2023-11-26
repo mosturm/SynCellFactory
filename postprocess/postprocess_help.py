@@ -37,7 +37,7 @@ def crop_image_if_needed(image,tw,th):
         image = image[pixels_to_remove_from_top:-pixels_to_remove_from_bottom, :]
     return image
 
-def crop_images_in_folder(folder_path):
+def crop_images_in_folder(folder_path,tw,th):
     for image_name in os.listdir(folder_path):
         if image_name.endswith('.tif'):
             image_path = os.path.join(folder_path, image_name)
@@ -45,7 +45,7 @@ def crop_images_in_folder(folder_path):
             cropped_image = crop_image_if_needed(image,tw,th)
             tf.imsave(image_path, cropped_image) 
 
-def crop_directory(base_directory):
+def crop_directory(base_directory,tw,th):
     sub_folders = [name for name in os.listdir(base_directory) if os.path.isdir(os.path.join(base_directory, name))]
     
     for sub_folder in tqdm(sorted(sub_folders)):
@@ -60,13 +60,14 @@ def crop_directory(base_directory):
         else:
             seg_folder = os.path.join(base_directory, sub_folder)
                 
-        crop_images_in_folder(seg_folder)
+        crop_images_in_folder(seg_folder,tw,th)
 
 def upscale_images_in_folder(folder_path, target_width, path_pretrained, model_name):
     #files_in_folder = glob.glob(os.path.join(folder_path, '*'))
 
   
     png_files = glob.glob(os.path.join(folder_path, '*.png'))
+    #for png_file in tqdm(png_files, desc="Creating Segmentation Masks"):
     for png_file in png_files:
         image = upscale_image(png_file, target_width)
         new_filename = "t" + str(os.path.basename(png_file).split('.')[0]).zfill(3) + '.tif'
@@ -249,8 +250,8 @@ def clean_up(base_directory):
                 img_one_channel = img[:, :, 0]
                 imsave(full_path, img_one_channel)
 
-
-
+def ignore_txt_files(directory, filenames):
+    return [filename for filename in filenames if filename.endswith('.txt')]
 
 def move_directory(base_directory_path, output_directory):
     # Get the name of the base directory (e.g., 'PSC')
@@ -267,13 +268,12 @@ def move_directory(base_directory_path, output_directory):
             print(f"Error: {new_directory_path} : {e.strerror}")
             return
 
-    # Copy the entire directory tree to the new location
+    # Copy the entire directory tree to the new location, excluding .txt files
     try:
-        shutil.copytree(base_directory_path, new_directory_path)
+        shutil.copytree(base_directory_path, new_directory_path, ignore=ignore_txt_files)
         print(f"Directory {base_directory_name} successfully copied to {output_directory}")
     except Exception as e:
         print(f"An error occurred while copying: {e}")
-
 
 
 def get_pp_params(name):
@@ -283,6 +283,7 @@ def get_pp_params(name):
 
     r = None
     max_shape_width = None
+    min_shape_heigth = None
 
     # Open and read the file
     try:
@@ -292,10 +293,11 @@ def get_pp_params(name):
             # Process each line to find the required values
             for line in lines:
                 if 'r:' in line:
-                    r = float(line.split(':')[1].strip())
+                    r = int(line.split(':')[1].strip())
                 elif 'Shape:' in line:
                     shape_values = line.split(':')[1].strip().strip('()').split(',')
                     max_shape_width = max(int(shape_values[0].strip()), int(shape_values[1].strip()))
+                    min_shape_heigth = min(int(shape_values[0].strip()), int(shape_values[1].strip()))
 
     except FileNotFoundError:
         print(f"File not found: {stat_path}")
@@ -306,6 +308,6 @@ def get_pp_params(name):
 
    
 
-    return sample_dir, max_shape_width, r 
+    return sample_dir, max_shape_width, min_shape_heigth, r 
 
 

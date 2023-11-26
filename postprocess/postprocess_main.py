@@ -2,7 +2,7 @@ from postprocess.postprocess_help import process_directory,crop_directory, move_
 
 def run_postproc(name,cellpose_path,cellpose_model):
 
-    base_directory_path, target_width_value, r = get_pp_params(name)
+    base_directory_path, target_width_value,target_height_value, r = get_pp_params(name)
     # Example usage:
     output_directory='./Outputs/'
 
@@ -11,4 +11,4 @@ def run_postproc(name,cellpose_path,cellpose_model):
     
     move_directory(base_directory_path,output_directory)
     process_directory(output_directory+name, target_width_value, cellpose_path, cellpose_model,r)
-    crop_directory(output_directory+name)
+    crop_directory(output_directory+name,target_width_value,target_height_value)
