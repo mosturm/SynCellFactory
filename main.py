@@ -4,6 +4,7 @@ import os
 from motion_module.motion_main import motion_run
 from create_train_data.train_main import train_run
 from ControlNet.create_vid import sample_vid
+from postprocess.postprocess_main import run_postproc
 
 
 
@@ -37,6 +38,8 @@ def main():
     n_cells = config.get('n_cells')
     train_CNet = config.get('train_CNet')
     cuda_index = config.get('cuda_index')
+    cellpose_path = config.get('cellpose_path')
+    cellpose_model = config.get('cellpose_modelname')
 
     input_path= './Inputs/'+name+'/train/'
     mm_path = './ControlNet/sampling/'+name
@@ -51,6 +54,7 @@ def main():
     if train_CNet:
         train_run(path_stats,input_path,name,save_dir_train,d_mitosis)
     sample_vid(name,cuda_index)
+    run_postproc(name,cellpose_path,cellpose_model)
 
 if __name__ == "__main__":
     main()
