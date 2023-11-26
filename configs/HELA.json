@@ -6,5 +6,5 @@
     "d_mitosis": 4,
     "n_cells": [5,7],
     "train_CNet": false,
-    "cuda_index": 0
+    "cuda_index": 1
 }

@@ -72,14 +72,14 @@ def process(input_image, prompt, a_prompt, n_prompt, num_samples, image_resoluti
 
 def make_init_pic(name, device, input_dir, output_dir, prompt, a_prompt, n_prompt, num_samples, image_resolution, ddim_steps, guess_mode, strength, scale, seed, eta, low_threshold, high_threshold):
     
-    resume_path = f'./models/{name}/last.ckpt'
+    resume_path = f'./ControlNet/models/{name}/last.ckpt'
 
 
     
     torch.cuda.set_device(device)
 
 
-    model = create_model('./models/cldm_v15.yaml').to(device)
+    model = create_model('./ControlNet/models/cldm_v15.yaml').to(device)
     model.load_state_dict(load_state_dict(resume_path, location='cpu'))
     model = model.to(device)
     ddim_sampler = DDIMSampler(model)
@@ -100,7 +100,7 @@ def make_init_pic(name, device, input_dir, output_dir, prompt, a_prompt, n_promp
 
     output_img = Image.fromarray(result.astype('uint8'))  # Convert result to PIL Image
     output_path = os.path.join(output_dir, os.path.splitext(os.path.basename(image_path))[0] + f'.png')
-    print('processing', image_path, output_path )
+    #print('processing', image_path, output_path )
     output_img.save(output_path)  # Save the image to the output directory
 
     img_number = int(os.path.splitext(os.path.basename(image_path))[0])
@@ -108,9 +108,9 @@ def make_init_pic(name, device, input_dir, output_dir, prompt, a_prompt, n_promp
     return img_number
 
 def make_vid(name,device, num, id_path, res_path, cond_path, prompt, a_prompt, n_prompt, num_samples, image_resolution, ddim_steps, guess_mode, strength, scale, seed, eta):
-    resume_path = f'./models/{name}_track/last.ckpt'
+    resume_path = f'./ControlNet/models/{name}_track/last.ckpt'
     A,pix=get_A_pix(name)
-
+    #print('A,pix',A,pix)
     r_a=int(np.sqrt(A/ np.pi) / 4) if int(np.sqrt(A/ np.pi) / 4) > 2 else 2
     f=((pix)/(512))
     r_a = int(r_a /f)
@@ -118,7 +118,7 @@ def make_vid(name,device, num, id_path, res_path, cond_path, prompt, a_prompt, n
     
     torch.cuda.set_device(device)
 
-    model = create_model('./models/cldm_v15.yaml').to(device)
+    model = create_model('./ControlNet/models/cldm_v15.yaml').to(device)
     model.load_state_dict(load_state_dict(resume_path, location='cpu'))
     model = model.to(device)
     ddim_sampler = DDIMSampler(model)
@@ -145,7 +145,7 @@ def make_vid(name,device, num, id_path, res_path, cond_path, prompt, a_prompt, n
         output_img.save(output_path)  # Save the image to the output directory
 
 def get_A_pix(name):
-    path = f'./sampling/{name}/statistics.txt'
+    path = f'./ControlNet/sampling/{name}/statistics.txt'
 
     # Initialize variables
     A_mu = None
@@ -191,17 +191,18 @@ def sample_vid(name, cuda_index):
     low_threshold = 100
     high_threshold = 200
 
-    base_dir = f'./sampling/{name}/'
+    base_dir = f'./ControlNet/sampling/{name}/'
 
-    if torch.cuda.is_available():
-        device = torch.device(f"cuda:{cuda_index}")
-    else:
-        device = torch.device("cpu")
-
+    #if torch.cuda.is_available():
+    #    device = torch.device(f"cuda:{cuda_index}")
+    #else:
+    #    device = torch.device("cpu")
+    device = torch.device(f"cuda:{cuda_index}")
+    #print('dev',device)
     torch.cuda.set_device(device)
 
     # Step 1: Create a list of all folders that match the pattern of being a run
-    run_folders = [f for f in os.listdir(base_dir) if not f.endswith('_GT')]
+    run_folders = [f for f in os.listdir(base_dir) if os.path.isdir(os.path.join(base_dir, f)) and not f.endswith('_GT')]
 
     for run in run_folders:
         # Derived and fixed paths
