@@ -1,8 +1,0 @@
-{   
-    "name": "PSC_track_720_576",
-    "resume_path": "/export/data/msturm/PSC_track_360/last.ckpt",
-    "ckpt_save_path": "/export/data/msturm/PSC_track_720",
-    "gpu_train": 7,
-    "gpu_samp": 7,
-    "max_steps": 7000
-}

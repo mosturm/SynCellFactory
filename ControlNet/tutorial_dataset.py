@@ -9,7 +9,7 @@ class MyDataset(Dataset):
     def __init__(self,folder):
         self.data = []
         self.folder =folder
-        with open('./training/'+self.folder+'/prompt.json', 'rt') as f:
+        with open('./ControlNet/training/'+self.folder+'/prompt.json', 'rt') as f:
             for line in f:
                 self.data.append(json.loads(line))
 
@@ -23,8 +23,8 @@ class MyDataset(Dataset):
         target_filename = item['target']
         prompt = item['prompt']
 
-        source = cv2.imread('./training/'+self.folder+'/' + source_filename)
-        target = cv2.imread('./training/'+self.folder+'/' + target_filename)
+        source = cv2.imread('./ControlNet/training/'+self.folder+'/' + source_filename)
+        target = cv2.imread('./ControlNet/training/'+self.folder+'/' + target_filename)
 
         # Do not forget that OpenCV read images in BGR order.
         source = cv2.cvtColor(source, cv2.COLOR_BGR2RGB)
@@ -46,7 +46,7 @@ class MyDataset_val(Dataset):
     def __init__(self,folder):
         self.data = []
         self.folder =folder
-        with open('./testing/'+self.folder+'/prompt.json', 'rt') as f:
+        with open('./ControlNet/testing/'+self.folder+'/prompt.json', 'rt') as f:
             for line in f:
                 self.data.append(json.loads(line))
 
@@ -60,8 +60,8 @@ class MyDataset_val(Dataset):
         target_filename = item['target']
         prompt = item['prompt']
 
-        source = cv2.imread('./testing/'+self.folder+'/' + source_filename)
-        target = cv2.imread('./testing/'+self.folder+'/' + target_filename)
+        source = cv2.imread('./ControlNet/testing/'+self.folder+'/' + source_filename)
+        target = cv2.imread('./ControlNet/testing/'+self.folder+'/' + target_filename)
 
         # Do not forget that OpenCV read images in BGR order.
         source = cv2.cvtColor(source, cv2.COLOR_BGR2RGB)

@@ -1,8 +1,0 @@
-{   
-    "name": "PSC_360_288",
-    "resume_path": "/export/home/msturm/ControlNet/models/control_sd15_cell.ckpt",
-    "ckpt_save_path": "/export/data/msturm/PSC_360",
-    "gpu_train": 1,
-    "gpu_samp": 7,
-    "max_steps": 60000
-}

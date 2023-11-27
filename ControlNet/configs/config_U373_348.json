@@ -1,8 +1,0 @@
-{   
-    "name": "U373_348_260",
-    "resume_path": "/export/home/msturm/ControlNet/models/control_sd15_cell.ckpt",
-    "ckpt_save_path": "/export/data/msturm/U373_348",
-    "gpu_train": 7,
-    "gpu_samp": 7,
-    "max_steps": 30000
-}

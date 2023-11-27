@@ -1,8 +1,0 @@
-{   
-    "name": "U373_track_696_520",
-    "resume_path": "/export/data/msturm/U373_348_track/last.ckpt",
-    "ckpt_save_path": "/export/data/msturm/U373_696_track",
-    "gpu_train": 2,
-    "gpu_samp": 7,
-    "max_steps": 3000
-}

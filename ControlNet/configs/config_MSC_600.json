@@ -1,8 +1,0 @@
-{   
-    "name": "MSC2_496_416",
-    "resume_path": "/export/home/msturm/ControlNet/models/control_sd15_cell.ckpt",
-    "ckpt_save_path": "/export/data/msturm/MSC_496",
-    "gpu_train": 5,
-    "gpu_samp": 7,
-    "max_epoch": 200
-}

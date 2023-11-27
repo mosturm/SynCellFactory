@@ -1,6 +1,6 @@
 {
     "name": "HELA",
-    "num_vid": 1,
+    "num_vid": 3,
     "num_timeframes": 12,
     "sp_prob": 0.15,
     "d_mitosis": 4,

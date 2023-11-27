@@ -36,7 +36,7 @@ def check_split(path,t,value):
 
 def connect_matching_dots(img1, img2, path, t, cells, test=False):
     # Find unique pixel values in both images
-    print('poss_val',np.linspace(100,255,12))
+    #print('poss_val',np.linspace(100,255,12))
     unique_values_1 = np.unique(img1)
     unique_values_2 = np.unique(img2)
 

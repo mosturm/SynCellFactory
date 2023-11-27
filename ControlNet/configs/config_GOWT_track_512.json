@@ -1,8 +1,0 @@
-{   
-    "name": "GOWT_track_512_512",
-    "resume_path": "/export/data/msturm/GOWT_512/last.ckpt",
-    "ckpt_save_path": "/export/data/msturm/GOWT_track_512",
-    "gpu_train": 1,
-    "gpu_samp": 7,
-    "max_epoch": 20
-}

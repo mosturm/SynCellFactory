@@ -52,7 +52,8 @@ def main():
 
     motion_run(input_path,mm_path,num_vid,sp_prob,num_timeframes,n_cells,d_mitosis)
     if train_CNet:
-        train_run(path_stats,input_path,name,save_dir_train,d_mitosis)
+        #train_run(path_stats,input_path,name,save_dir_train,d_mitosis)
+        train_run(path_stats,input_path,name,save_dir_train,d_mitosis,n_cells,cuda_index)
     sample_vid(name,cuda_index)
     run_postproc(name,cellpose_path,cellpose_model)
 
