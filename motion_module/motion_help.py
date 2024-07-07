@@ -96,7 +96,7 @@ def ini_pic(b, r_mu, r_sig, pix_max,pix_min, t, run, path='.',bg=False):
     my_dpi = 96
 
     if not os.path.isdir(path):
-        os.mkdir(path)
+        os.makedirs(path)
     if not os.path.isdir(path+'/' + str(run)):
 
         os.mkdir(path+'/' + str(run))
@@ -820,6 +820,9 @@ def motion_module(input_path,mm_path,num_vid,sp_prob,t,n_cells):
 
     file_path = mm_path+'/statistics.txt'
 
+
+    if not os.path.exists(file_path):
+        open(file_path, 'w').close()
 
     with open(file_path, 'w') as file:
         file.write(f"----Area (px)---\n")

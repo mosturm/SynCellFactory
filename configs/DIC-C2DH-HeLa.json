@@ -1,12 +1,12 @@
 {
-    "name": "HELA",
+    "name": "DIC-C2DH-HeLa",
     "num_vid": 3,
     "num_timeframes": 12,
     "sp_prob": 0.15,
     "d_mitosis": 4,
     "n_cells": [5,7],
     "train_CNet": false,
-    "cuda_index": 1,
+    "cuda_index": 0,
     "cellpose_path": "",
     "cellpose_modelname": "CPx"
 
