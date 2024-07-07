@@ -18,7 +18,7 @@ pip install -r requirements.txt
 ### Running the Provided Example
 1. Download `DIC-C2DH-HeLa` and `DIC-C2DH-HeLa_track` folders (contains the trained CN-Pos and CN-Mov checkpoints for DIC-C2DH-HeLa) from https://drive.google.com/drive/folders/1zvqZiFwMUMwReB1jdSMTUtTKqiX2KGRG?usp=drive_link
 2. Place both folders into `./ControlNet/models/` in the following format: 
-
+```
 SynCellFactory/
 └── ControlNet/
     └── models/
@@ -26,10 +26,10 @@ SynCellFactory/
         │   └── last.ckpt
         └── DIC-C2DH-HeLa_track/
             └── last.ckpt
-
+```
 3. Download the official 2D datasets from the CTC : http://data.celltrackingchallenge.net/training-datasets/DIC-C2DH-HeLa.zip 
 4. Place the train and test datasets from the CTC (labeled `01` and `02` ) in `./Inputs/DIC-C2DH-HeLa/` in the following format: 
-
+```
 SynCellFactory/
 └── Inputs/
     └── DIC-C2DH-HeLa/
@@ -41,7 +41,7 @@ SynCellFactory/
             ├── 02/
             ├── 02_GT/
             └── 02_ST/
-
+```
 5. Start the SynCellFactory sampling process:
    ```bash
    python main.py DIC-C2DH-HeLa
