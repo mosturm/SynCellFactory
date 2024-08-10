@@ -2,6 +2,7 @@ import json
 import subprocess
 import numpy as np
 from tqdm import tqdm
+import os 
 
 def generate_config_and_path(name, resume_path, ckpt_save_path, gpu_train, gpu_samp, max_steps):
     # Create the configuration dictionary
@@ -20,6 +21,7 @@ def generate_config_and_path(name, resume_path, ckpt_save_path, gpu_train, gpu_s
     return config_params, config_file_path
 
 def write_config_to_file(config_params, config_file_path):
+    os.makedirs(os.path.dirname(config_file_path), exist_ok=True)
     with open(config_file_path, 'w') as file:
         json.dump(config_params, file, indent=4)
 

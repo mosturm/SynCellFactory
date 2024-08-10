@@ -1,4 +1,11 @@
-SCF
+env/
+ControlNet/sampling/*
+ControlNet/models/*/
+ControlNet/testing
+ControlNet/training
+Inputs/*/
+Outputs/*/
+
 
 *.png
 *.jpg

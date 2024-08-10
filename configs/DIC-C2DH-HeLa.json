@@ -5,7 +5,7 @@
     "sp_prob": 0.15,
     "d_mitosis": 4,
     "n_cells": [5,7],
-    "train_CNet": false,
+    "train_CNet": true,
     "cuda_index": 0,
     "cellpose_path": "",
     "cellpose_modelname": "CPx"

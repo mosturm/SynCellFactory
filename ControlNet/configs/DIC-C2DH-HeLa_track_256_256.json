@@ -1,0 +1,8 @@
+{
+    "name": "DIC-C2DH-HeLa_track_256_256",
+    "resume_path": "./ControlNet/models/DIC-C2DH-HeLa_BM/last.ckpt",
+    "ckpt_save_path": "./ControlNet/models/DIC-C2DH-HeLa_BM_track",
+    "gpu_train": 0,
+    "gpu_samp": 0,
+    "max_steps": 15000
+}
