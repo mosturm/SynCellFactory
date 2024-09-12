@@ -1,10 +1,16 @@
 env/
 ControlNet/sampling/*/
+!ControlNet/sampling/.gitkeep
 ControlNet/models/*/
+!ControlNet/models/.gitkeep
 ControlNet/testing/*/
+!ControlNet/testing/.gitkeep
 ControlNet/training/*/
+!ControlNet/training/.gitkeep
 Inputs/*/
+!Inputs/.gitkeep
 Outputs/*/
+!Outputs/.gitkeep
 
 
 *.png
