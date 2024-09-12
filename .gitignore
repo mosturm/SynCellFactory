@@ -1,8 +1,8 @@
 env/
-ControlNet/sampling/*
+ControlNet/sampling/*/
 ControlNet/models/*/
-ControlNet/testing
-ControlNet/training
+ControlNet/testing/*/
+ControlNet/training/*/
 Inputs/*/
 Outputs/*/
 
